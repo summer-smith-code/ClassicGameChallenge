@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class DuckerMovement : MonoBehaviour
@@ -46,9 +47,32 @@ public class DuckerMovement : MonoBehaviour
         targetPosition.z = Mathf.Round(targetPosition.z);
 
         // Teleport Ducker to next grid position
-        transform.position = targetPosition;
+        // transform.position = targetPosition;
+        StartCoroutine(Leap(targetPosition));
 
         //Checks input cooldown
         lastMoveTime = Time.time;
+
+
+    }
+    // Smooth leap animation
+    private IEnumerator Leap(Vector3 destination)
+    {
+        Vector3 startPosition = transform.position;
+
+        float elapsedTime = 0f;
+        float leapDuration = 0.125f; // Duration of the leap
+
+        // Smoothly move to the destination over leapDuration
+        while (elapsedTime < leapDuration)
+        {
+            //Interpolate position over time
+            transform.position = Vector3.Lerp(startPosition, destination, (elapsedTime / leapDuration));
+            // Increment elapsed time
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        // Ensure final position is set
+        transform.position = destination;
     }
 }
