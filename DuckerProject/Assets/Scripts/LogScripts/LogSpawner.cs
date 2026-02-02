@@ -1,36 +1,49 @@
 using UnityEngine;
+using System.Collections;
 
 // Log spawner script
 public class LogSpawner : MonoBehaviour
 {
-    //enter log prefabs and spawn interval in inspector
+    //log prefabs to spawn
     public GameObject[] logPrefabs;
-    public float spawnInterval = 2f;
 
-    //set lane position and length
+    //spawn intervals
+    private float[] spawnIntervals = { 1f, 2f, 3f };
+
+    //spawn position
     public float spawnX = -25f;
     public float laneZ;
 
-    //spawn logs at regular intervals
+    //run spawner
     void Start()
     {
-        InvokeRepeating(nameof(SpawnLog), 0f, spawnInterval);
+        StartCoroutine(SpawnLogs());
     }
 
-    //spawn a random log prefab at the spawn position
+    //spawn logs at random intervals
+    IEnumerator SpawnLogs()
+    {
+        while (true)
+        {
+            SpawnLog();
+
+            float waitTime = spawnIntervals[Random.Range(0, spawnIntervals.Length)];
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    //spawn a single log
     void SpawnLog()
     {
-        //select random log prefab
         GameObject prefab =
             logPrefabs[Random.Range(0, logPrefabs.Length)];
 
-        //set spawn position
         Vector3 spawnPos = new Vector3(
             spawnX,
             transform.position.y,
             laneZ
         );
-        //create log instance
+
         Instantiate(prefab, spawnPos, Quaternion.identity);
     }
 }
