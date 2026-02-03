@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6440733931949225733}
   - component: {fileID: 8178725296977251682}
   - component: {fileID: 6977276760097168511}
-  - component: {fileID: 5559507734351224908}
+  - component: {fileID: 4367716446156588249}
   m_Layer: 0
   m_Name: TempLogShort
   m_TagString: Untagged
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5559507734351224908
+--- !u!114 &4367716446156588249
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,8 +115,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4273425130593197008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38b8f2165cb4a8d4498f00a2daed0821, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d1eea9da0ef93944afde280ff291f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  despawnX: 25
+  direction: {x: 1, y: 0, z: 0}
+  speed: 2.5
+  size: 1
