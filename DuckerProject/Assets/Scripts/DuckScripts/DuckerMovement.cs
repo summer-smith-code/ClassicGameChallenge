@@ -1,11 +1,12 @@
 using UnityEngine;
+//Ducker Movement
 
 public class DuckerMovement : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float moveSpeed = 8f;       // Tile movement speed
-    public float yOffset = 0.34f;      // Frog height above floor/log
-    public float rotationSpeed = 720f; // Degrees/sec
+    //Ducker movespeed/startinglocation
+    public float moveSpeed = 8f;
+    public float yOffset = 0.34f;
+    public float rotationSpeed = 720f;
 
     private Vector3 targetPosition;
     private Vector3 moveDirection = Vector3.forward;
@@ -13,20 +14,21 @@ public class DuckerMovement : MonoBehaviour
     private Transform currentLog;
     private Vector3 previousLogPosition;
 
-    // Threshold to detect log wrapping (larger than largest log length)
+    //works with logs that wrap (MoveCycle script)
     private float wrapThreshold = 5f;
 
     void Start()
     {
-        // Snap frog to nearest grid at start
+        // Snap ducker to nearest grid
         targetPosition = new Vector3(Mathf.Round(transform.position.x),
-                                     yOffset,
-                                     Mathf.Round(transform.position.z));
+            yOffset,
+            Mathf.Round(transform.position.z));
         transform.position = targetPosition;
     }
 
     void Update()
     {
+        //runs functions
         HandleInput();
         MoveTowardsTarget();
         RideLog();
@@ -35,10 +37,12 @@ public class DuckerMovement : MonoBehaviour
 
     void HandleInput()
     {
-        // Only allow movement if frog reached target
+        // Prevents moving before Ducker reaches correct grid position
         if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
             Vector3 input = Vector3.zero;
+            
+            //Takes player input
 
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
                 input = Vector3.forward;
@@ -49,6 +53,7 @@ public class DuckerMovement : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 input = Vector3.right;
 
+            //Uses player input to move Ducker
             if (input != Vector3.zero)
             {
                 moveDirection = input.normalized;
@@ -57,13 +62,13 @@ public class DuckerMovement : MonoBehaviour
             }
         }
     }
-
+    //ducker moving animation
     void MoveTowardsTarget()
     {
-        // Smoothly slide to the target tile
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
     }
 
+    //Ducker rotating animation
     void RotateTowardsMovement()
     {
         if (moveDirection != Vector3.zero)
@@ -72,7 +77,8 @@ public class DuckerMovement : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
     }
-
+    
+    //log riding logic
     void RideLog()
     {
         if (currentLog != null)
@@ -85,7 +91,7 @@ public class DuckerMovement : MonoBehaviour
             if (Mathf.Abs(logDelta.z) > wrapThreshold)
                 logDelta.z = 0;
 
-            // Add log movement to frog (both position and targetPosition)
+            // Add log movement to ducker
             transform.position += new Vector3(logDelta.x, 0, logDelta.z);
             targetPosition += new Vector3(logDelta.x, 0, logDelta.z);
 
@@ -93,6 +99,7 @@ public class DuckerMovement : MonoBehaviour
         }
     }
 
+    //Check if ducker is on a log
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Log"))
@@ -102,6 +109,7 @@ public class DuckerMovement : MonoBehaviour
         }
     }
 
+    //allows ducker off log
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Log") && other.transform == currentLog)
