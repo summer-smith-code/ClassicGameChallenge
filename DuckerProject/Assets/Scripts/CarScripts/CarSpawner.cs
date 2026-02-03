@@ -1,11 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-// Log spawner script
-public class LogSpawner : MonoBehaviour
+// car spawner script
+public class CarSpawner : MonoBehaviour
 {
-    //log prefabs to spawn
-    public GameObject[] logPrefabs;
+    //car prefabs to spawn
+    public GameObject[] carPrefabs;
 
     //spawn intervals
     private float[] spawnIntervals = { 1f, 2f, 3f };
@@ -17,26 +17,26 @@ public class LogSpawner : MonoBehaviour
     //run spawner
     void Start()
     {
-        StartCoroutine(SpawnLogs());
+        StartCoroutine(SpawnCars());
     }
 
-    //spawn logs at random intervals
-    IEnumerator SpawnLogs()
+    //spawn cars at random intervals
+    IEnumerator SpawnCars()
     {
         while (true)
         {
-            SpawnLog();
+            SpawnCar();
 
             float waitTime = spawnIntervals[Random.Range(0, spawnIntervals.Length)];
             yield return new WaitForSeconds(waitTime);
         }
     }
 
-    //spawn a single log
-    void SpawnLog()
+    //spawn a single car
+    void SpawnCar()
     {
         GameObject prefab =
-            logPrefabs[Random.Range(0, logPrefabs.Length)];
+            carPrefabs[Random.Range(0, carPrefabs.Length)];
 
         Vector3 spawnPos = new Vector3(
             spawnX,
