@@ -1,147 +1,110 @@
-using System.Collections;
 using UnityEngine;
 
-// Ducker movement script
 public class DuckerMovement : MonoBehaviour
 {
-    // Movement settings
-    public float moveDistance = 1f;
-    public float moveCooldown = 0.2f;
-    public float leapDuration = 0.125f;
+    [Header("Movement Settings")]
+    public float moveSpeed = 8f;       // Tile movement speed
+    public float yOffset = 0.34f;      // Frog height above floor/log
+    public float rotationSpeed = 720f; // Degrees/sec
 
-    // Grid boundaries
-    public int minX = -7;
-    public int maxX = 7;
-    public int minZ = -7;
-    public int maxZ = 7;
+    private Vector3 targetPosition;
+    private Vector3 moveDirection = Vector3.forward;
 
-    // Movement tracking
-    private float lastMoveTime;
-    private Vector2Int gridPosition;
+    private Transform currentLog;
+    private Vector3 previousLogPosition;
 
-    // Log tracking
-    private Transform currentLog = null;
-    private Vector3 lastLogPosition;
+    // Threshold to detect log wrapping (larger than largest log length)
+    private float wrapThreshold = 5f;
 
-    //movement logic
     void Start()
     {
-        gridPosition = new Vector2Int(
-            Mathf.RoundToInt(transform.position.x),
-            Mathf.RoundToInt(transform.position.z)
-        );
+        // Snap frog to nearest grid at start
+        targetPosition = new Vector3(Mathf.Round(transform.position.x),
+                                     yOffset,
+                                     Mathf.Round(transform.position.z));
+        transform.position = targetPosition;
     }
-
 
     void Update()
     {
-        // Move duck with log if standing on one
+        HandleInput();
+        MoveTowardsTarget();
+        RideLog();
+        RotateTowardsMovement();
+    }
+
+    void HandleInput()
+    {
+        // Only allow movement if frog reached target
+        if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
+        {
+            Vector3 input = Vector3.zero;
+
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+                input = Vector3.forward;
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+                input = Vector3.back;
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                input = Vector3.left;
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+                input = Vector3.right;
+
+            if (input != Vector3.zero)
+            {
+                moveDirection = input.normalized;
+                targetPosition += input;
+                targetPosition.y = yOffset;
+            }
+        }
+    }
+
+    void MoveTowardsTarget()
+    {
+        // Smoothly slide to the target tile
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+    }
+
+    void RotateTowardsMovement()
+    {
+        if (moveDirection != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(moveDirection, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
+        }
+    }
+
+    void RideLog()
+    {
         if (currentLog != null)
         {
-            Vector3 logDelta = currentLog.position - lastLogPosition;
-            transform.position += logDelta;
+            Vector3 logDelta = currentLog.position - previousLogPosition;
 
-            // Keep duck on top of the log
-            transform.position = new Vector3(
-                transform.position.x,
-                currentLog.position.y + 0.5f,
-                transform.position.z
-            );
+            // Ignore huge jumps caused by log wrapping
+            if (Mathf.Abs(logDelta.x) > wrapThreshold)
+                logDelta.x = 0;
+            if (Mathf.Abs(logDelta.z) > wrapThreshold)
+                logDelta.z = 0;
 
-            lastLogPosition = currentLog.position;
+            // Add log movement to frog (both position and targetPosition)
+            transform.position += new Vector3(logDelta.x, 0, logDelta.z);
+            targetPosition += new Vector3(logDelta.x, 0, logDelta.z);
+
+            previousLogPosition = currentLog.position;
         }
-
-        // Check move cooldown
-        if (Time.time - lastMoveTime < moveCooldown)
-            return;
-
-        // WASD or Arrow Key Input
-        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-            TryMove(Vector3.forward);
-        else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-            TryMove(Vector3.back);
-        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-            TryMove(Vector3.left);
-        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
-            TryMove(Vector3.right);
     }
 
-
-    //move attempt logic
-    void TryMove(Vector3 direction)
-    {
-        Vector2Int moveDir = new Vector2Int(
-            Mathf.RoundToInt(direction.x),
-            Mathf.RoundToInt(direction.z)
-        );
-        // Target grid position
-        Vector2Int targetGridPos = gridPosition + moveDir;
-
-        // Block out-of-bounds moves
-        if (targetGridPos.x < minX || targetGridPos.x > maxX ||
-            targetGridPos.y < minZ || targetGridPos.y > maxZ)
-        {
-            return;
-        }
-
-        // Rotate duck
-        transform.forward = direction;
-
-        // Commit grid move
-        gridPosition = targetGridPos;
-
-        // World position to leap to
-        Vector3 targetWorldPos = new Vector3(
-            gridPosition.x,
-            transform.position.y,
-            gridPosition.y
-        );
-
-        // Start leap coroutine
-        StartCoroutine(Leap(targetWorldPos));
-        lastMoveTime = Time.time;
-    }
-
-    //leap movement logic
-    private IEnumerator Leap(Vector3 destination)
-    {
-        //move animation
-        Vector3 startPosition = transform.position;
-        float elapsedTime = 0f;
-
-        //leap over time
-        while (elapsedTime < leapDuration)
-        {
-            transform.position = Vector3.Lerp(startPosition, destination, elapsedTime / leapDuration);
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        //check final position
-        transform.position = destination;
-    }
-
-    //log collision logic
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Log"))
         {
             currentLog = other.transform;
-            lastLogPosition = currentLog.position;
-
-            // Snap duck onto top of the log
-            Vector3 snapPos = new Vector3(
-                transform.position.x,
-                currentLog.position.y + 0.5f,
-                transform.position.z
-            );
-            transform.position = snapPos;
+            previousLogPosition = currentLog.position;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Log") && currentLog == other.transform)
+        if (other.CompareTag("Log") && other.transform == currentLog)
         {
             currentLog = null;
         }
