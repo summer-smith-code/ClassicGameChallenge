@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8698843916428878529}
   - component: {fileID: 4678410170239733357}
   - component: {fileID: 770489301188129234}
-  - component: {fileID: 1502179550627640586}
+  - component: {fileID: 6333073360664170080}
   m_Layer: 0
   m_Name: TempLogLong
   m_TagString: Log
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1502179550627640586
+--- !u!114 &6333073360664170080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,8 +115,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6013709538096341275}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 38b8f2165cb4a8d4498f00a2daed0821, type: 3}
+  m_Script: {fileID: 11500000, guid: 5d1eea9da0ef93944afde280ff291f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
-  despawnX: 25
+  direction: {x: 1, y: 0, z: 0}
+  speed: 1.5
+  size: 3
