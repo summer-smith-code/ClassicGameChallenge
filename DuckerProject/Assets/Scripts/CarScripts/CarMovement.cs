@@ -1,19 +1,19 @@
 using UnityEngine;
 
-// Log movement script
-public class LogMovement : MonoBehaviour
+// Car movement script
+public class CarMovement : MonoBehaviour
 {
-    //set log speed and despawn position
+    //set car speed and despawn position
     public float speed = 2f;
     public float despawnX = 20f;
 
-    //moves log forward and despawns it when out of bounds
+    //moves car forward and despawns it when out of bounds
     void Update()
     {
-        //move log forward
+        //move car forward
         transform.Translate(Vector3.right * speed * Time.deltaTime);
 
-        //despawn log if it goes out of bounds
+        //despawn car if it goes out of bounds
         if (transform.position.x >= despawnX)
         {
             Destroy(gameObject);
