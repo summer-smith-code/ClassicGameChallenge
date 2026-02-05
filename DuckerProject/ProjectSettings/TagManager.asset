@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Log
   - Water
+  - Cove
+  - Car
   layers:
   - Default
   - TransparentFX

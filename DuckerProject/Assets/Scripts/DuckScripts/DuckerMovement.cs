@@ -8,11 +8,11 @@ public class DuckerMovement : MonoBehaviour
     public float yOffset = 0.34f;
     public float rotationSpeed = 720f;
 
-    private Vector3 targetPosition;
-    private Vector3 moveDirection = Vector3.forward;
+    public Vector3 targetPosition;
+    public Vector3 moveDirection = Vector3.forward;
 
-    private Transform currentLog;
-    private Vector3 previousLogPosition;
+    public Transform currentLog;
+    public Vector3 previousLogPosition;
 
     //works with logs that wrap (MoveCycle script)
     private float wrapThreshold = 5f;
