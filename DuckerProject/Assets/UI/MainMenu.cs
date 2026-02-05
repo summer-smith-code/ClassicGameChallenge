@@ -6,15 +6,21 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class MainMenu : MonoBehaviour
 {
-    public Scene firstLevel;
-
     public void Play()
     {
-        SceneManager.LoadScene("firstLevel");
+        Debug.Log("Pressed Play");
+        SceneManager.LoadScene(1);
+    }
+
+    public void Play2()
+    {
+        Debug.Log("Pressed Play2");
+        SceneManager.LoadScene(2);
     }
 
     public void Quit()
     {
+        Debug.Log("Pressed Quit");
         Application.Quit();
     }
 }
