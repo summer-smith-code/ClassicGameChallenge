@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     // Total number of lives and coves
     public int totalLives = 3;
-    public int totalCoves = 5;
+    public int totalCoves = 10;
 
     // Current values that track player's lives and filled coves
     [HideInInspector] public int currentLives;
