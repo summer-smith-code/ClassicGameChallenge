@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
     private void WinGame()
     {
         // Handle win logic
-        Debug.Log("You won! Victory!");
+        Debug.Log("You won!");
         //Link to win screen
     }
 }
