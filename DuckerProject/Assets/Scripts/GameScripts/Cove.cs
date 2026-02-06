@@ -44,6 +44,7 @@ public class Cove : MonoBehaviour
         else if (other.CompareTag("Player") && isFilled)
         {
             Debug.Log("Player reached the cove, but it is already filled.");
+            GameManager.Instance.PlayerLostLife();
         }
     }
 
