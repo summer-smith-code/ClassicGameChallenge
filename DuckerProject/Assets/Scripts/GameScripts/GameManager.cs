@@ -1,11 +1,12 @@
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     // Ensure only one GameManager exists
     public static GameManager Instance;
 
-    // Total number of lives and coves (not functional yet)
+    // Total number of lives and coves
     public int totalLives = 3;
     public int totalCoves = 5;
 
@@ -13,13 +14,15 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public int currentLives;
     [HideInInspector] public int covesFilled;
 
-    //prevent multiple life loss calls during a single death event
+    // Prevent multiple life loss calls during a single death event
     private bool isPlayerDead = false;
 
+    // Reference to the TMP
+    public TextMeshProUGUI livesText;
 
     private void Awake()
     {
-        // Check if an instance already exists
+        // Ensure there's only one instance of GameManager
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -33,48 +36,57 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //reset variables
+        // Reset variables
         currentLives = totalLives;
         covesFilled = 0;
 
         // Log the initial game state
         Debug.Log("Game started with " + totalLives + " lives and " + totalCoves + " coves.");
+
+        // Update the UI
+        UpdateLivesText();
     }
 
     // Method called when the player loses a life
     public void PlayerLostLife()
     {
-         // Prevent double life loss
+        // Prevent double life loss
         if (isPlayerDead) return;
 
-        // Mark the player as dead for the current death event
+        // Mark the player as dead
         isPlayerDead = true;
 
         // Decrease the player's remaining lives
         currentLives--;
 
-        // Log the remaining lives after the player loses a life
+        // Log the remaining lives
         Debug.Log("Player lost a life. Lives remaining: " + currentLives);
+
+        // Update the UI
+        UpdateLivesText();
 
         // Check if the player has run out of lives
         if (currentLives <= 0)
         {
             // Game Over message
             Debug.Log("Game Over!");
-  
-            // GameOver(); (not ready)
+            GameOver();
         }
-
+        else
+        {
+            // Reset the death flag after a short delay
+            Invoke("ResetDeathFlag", 1f);
+        }
     }
 
     // Reset the isPlayerDead flag
-    public void ResetDeathFlag()
+    private void ResetDeathFlag()
     {
-        // Reset flag to allow life loss again on the next death event
+ 
         isPlayerDead = false;
     }
 
-    // Method called when a cove is filled
+
     public void CoveFilled()
     {
         // Fill 1 cove
@@ -88,25 +100,34 @@ public class GameManager : MonoBehaviour
         {
             // Victory message
             Debug.Log("You Win!");
-
-            // WinGame(); (not ready)
+            WinGame();
         }
     }
 
+    // Update the TMP
+    private void UpdateLivesText()
+    {
+        if (livesText != null)
+        {
+            livesText.text = "Lives: " + currentLives;
+        }
+        else
+        {
+            Debug.LogWarning("LivesText UI element is not assigned!");
+        }
+    }
 
     private void GameOver()
     {
-        // Stop the game or trigger level restart
-        Debug.Log("Game Over! Restarting level...");
-        //link to Ui loss
+        // Handle game over logic
+        Debug.Log("Game Over!");
+        //Link to lose screen
     }
-
 
     private void WinGame()
     {
-        // Stop the game or trigger victory screen
+        // Handle win logic
         Debug.Log("You won! Victory!");
-        //link to ui win
-
+        //Link to win screen
     }
 }
