@@ -23,4 +23,12 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Pressed Quit");
         Application.Quit();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Quit();
+        }
+    }
 }
