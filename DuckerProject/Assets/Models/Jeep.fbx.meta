@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 48f97771a7ac528489cd8f1dd3652d06
+guid: 16338cfed8596174ea0a723835cac647
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,38 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: openPBR_shader1
-    second: {fileID: 2100000, guid: 2f708dbf49a942040bc8d434ebdb81ed, type: 2}
+      name: Jeep_Base_Body
+    second: {fileID: 2100000, guid: 4bd50bb401f98d84eac01fa20aea2abf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Jeep_Bumpers
+    second: {fileID: 2100000, guid: 77c1e484fb9d8e54a99345b333a52fa3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Jeep_Glass
+    second: {fileID: 2100000, guid: ed51e29e2c521af4b84e8d2f03328466, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Jeep_Wheels
+    second: {fileID: 2100000, guid: d28c363ed4a7e064980d079d57d8e5ff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lights1
+    second: {fileID: 2100000, guid: 5ab7c5e2245010a42b378f15dcdcd8d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert1
+    second: {fileID: 2100000, guid: 27e1b689a14220a45bb8ed96a64f7092, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: openPBRSurface13
+    second: {fileID: 2100000, guid: a60961173d8830c45b8dfed3f9476e95, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
