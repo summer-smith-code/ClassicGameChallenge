@@ -1,49 +1,86 @@
 using UnityEngine;
+using System.Collections;  // Add this line to fix the IEnumerator error
+
 public class PlayerController : MonoBehaviour
 {
     public Transform startPoint;
     private bool isOnLog = false;
+    private bool isLeavingLog = false;  // Flag to prevent immediate exit detection
 
-    //check tags on obstacles
+    // Check for tags on obstacles
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("OnTriggerEnter: " + other.gameObject.name);
+
+        // Check if the player hits a car
         if (other.CompareTag("Car"))
         {
             Debug.Log("Player hit a Car!");
             GameManager.Instance.PlayerLostLife();
             TeleportToStart();
         }
-        else if (other.CompareTag("Water") && !isOnLog)
+        // Check if the player falls in water (only trigger death if not on a log)
+        else if (other.CompareTag("Water"))
         {
-            Debug.Log("Player fell in Water!");
-            GameManager.Instance.PlayerLostLife();
-            TeleportToStart();
+            if (!isOnLog)  // Only die if we're not on a log
+            {
+                Debug.Log("Player fell in Water!");
+                GameManager.Instance.PlayerLostLife();
+                TeleportToStart();
+            }
+            else
+            {
+                Debug.Log("Player is on a Log, skipping water death.");
+            }
         }
+        // Check if the player reaches a cove
         else if (other.CompareTag("Cove"))
         {
             ReachedCove();
         }
     }
 
-    //override water death when on log
+    // Continuously check if the player is on a log
     private void OnTriggerStay(Collider other)
     {
+        // If the player is on the log, and we haven't already set the flag
         if (other.CompareTag("Log"))
         {
-            isOnLog = true;
+            if (!isOnLog)  // Only set it to true if it's not already set
+            {
+                isOnLog = true;  // Player is on the log, safe from water death
+                Debug.Log("Player is on a Log");
+            }
+            isLeavingLog = false;  // Reset leaving log flag when staying on it
         }
     }
 
-    //player dies in water(not on log)
+    // Player exits the log (set isOnLog to false)
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Log"))
         {
-            isOnLog = false;
+            // Add a margin of safety before the player is considered to have left the log
+            if (!isLeavingLog)
+            {
+                StartCoroutine(WaitAndCheckExit(other));  // Use a delay to check exit more reliably
+            }
         }
     }
 
-    //reset player position and stop velocity
+    private IEnumerator WaitAndCheckExit(Collider other)
+    {
+        yield return new WaitForSeconds(0.1f);  // Small delay before setting exit state
+
+        if (!isLeavingLog)  // Make sure the player is still outside the log after the delay
+        {
+            isOnLog = false;  // Player has completely left the log
+            Debug.Log("Player left the Log");
+            isLeavingLog = true;
+        }
+    }
+
+    // Reset player position and stop velocity
     private void TeleportToStart()
     {
         DuckerMovement duckerMovement = GetComponent<DuckerMovement>();
@@ -70,6 +107,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Player reached a cove (complete level or goal)
     public void ReachedCove()
     {
         Debug.Log("Player reached a cove.");
