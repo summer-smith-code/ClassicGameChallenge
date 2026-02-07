@@ -5,12 +5,12 @@ public class ResetPoint : MonoBehaviour
 
 {
     public Transform resetPoint;
-    public float xOffset = 2f;
+    public float xOffset = 3f;
 
-    //Reset position of the car when it enters the trigger
+    //Reset position of the car/log when it enters the trigger
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Car")) return;
+        if (!other.CompareTag("Car") && !other.CompareTag("Log")) return;
 
         Debug.Log("Car triggered reset point: " + other.name);
 
@@ -21,6 +21,8 @@ public class ResetPoint : MonoBehaviour
         newPos.x = resetPoint.position.x + xOffset;
 
         Rigidbody rb = other.attachedRigidbody;
+
+
 
         if (rb != null)
         {
