@@ -1,10 +1,13 @@
 using UnityEngine;
 
+// Resets the car's position when it enters the trigger
 public class ResetPoint : MonoBehaviour
+
 {
     public Transform resetPoint;
-    public float xOffset = 2f; // Add an X offset to avoid immediate retrigger
+    public float xOffset = 2f;
 
+    //Reset position of the car when it enters the trigger
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Car")) return;
@@ -14,7 +17,7 @@ public class ResetPoint : MonoBehaviour
         // Only modify X position
         Vector3 newPos = other.transform.position;
 
-        // Add the offset. You can adjust the sign depending on direction.
+        // Add offset
         newPos.x = resetPoint.position.x + xOffset;
 
         Rigidbody rb = other.attachedRigidbody;
@@ -34,6 +37,5 @@ public class ResetPoint : MonoBehaviour
             other.transform.position = newPos;
         }
 
-        // Rotation and Y/Z positions are untouched
     }
 }
