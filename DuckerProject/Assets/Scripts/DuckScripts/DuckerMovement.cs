@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 //Ducker Movement
 
 public class DuckerMovement : MonoBehaviour
@@ -17,8 +18,16 @@ public class DuckerMovement : MonoBehaviour
     //works with logs that wrap (MoveCycle script)
     private float wrapThreshold = 5f;
 
+
     void Start()
     {
+        // Ducker bobbing animation
+        // Sequence seq = DOTween.Sequence();
+        // seq.Append(transform.DOMoveY(transform.position.y + 1f, 3f));
+
+        DOTween.SetTweensCapacity(100, 10);
+        transform.DOScaleY(0.009f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
         // Snap ducker to nearest grid
         targetPosition = new Vector3(Mathf.Round(transform.position.x),
             yOffset,
@@ -70,6 +79,7 @@ public class DuckerMovement : MonoBehaviour
     void MoveTowardsTarget()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        
     }
 
     //Ducker rotating animation
