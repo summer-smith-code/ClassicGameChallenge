@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator WaitAndCheckExit(Collider other)
     {
-        yield return new WaitForSeconds(0.1f);  // Small delay before setting exit state
+        yield return new WaitForSeconds(0f);  // Small delay before setting exit state
 
         if (!isLeavingLog)
         {

@@ -50,16 +50,16 @@ public class DuckerMovementLvl2 : MonoBehaviour
         if (Vector3.Distance(transform.position, targetPosition) < 0.01f)
         {
             Vector3 input = Vector3.zero;
-            
+
             // Takes player input
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
-                input = Vector3.left;
-            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
-                input = Vector3.right;
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
-                input = Vector3.back;
-            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 input = Vector3.forward;
+            else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+                input = Vector3.back;
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+                input = Vector3.left;
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+                input = Vector3.right;
 
             // Uses player input to move Ducker
             if (input != Vector3.zero)
@@ -88,18 +88,8 @@ public class DuckerMovementLvl2 : MonoBehaviour
     {
         if (moveDirection != Vector3.zero)
         {
-            // Base rotation towards movement direction
             Quaternion targetRot = Quaternion.LookRotation(moveDirection, Vector3.up);
-
-            //rotate ducker -90 degrees to face forward
-            Quaternion modelOffset = Quaternion.Euler(0f, -90f, 0f);
-
-           
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                targetRot * modelOffset,
-                rotationSpeed * Time.deltaTime
-            );
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
     }
 
