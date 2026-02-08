@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("OnTriggerEnter: " + other.gameObject.name);
+         Debug.Log("Triggered by " + other.name + ", tag=" + other.tag);
 
         // Check if the player hits a car
         if (other.CompareTag("Car"))
@@ -22,7 +23,7 @@ public class PlayerController : MonoBehaviour
         // Check if the player falls in water (only trigger death if not on a log)
         else if (other.CompareTag("Water"))
         {
-            if (!isOnLog)  // Only die if we're not on a log
+            if (!isOnLog)  // Only die if not on a log
             {
                 Debug.Log("Player fell in Water!");
                 GameManager.Instance.PlayerLostLife();
@@ -43,10 +44,10 @@ public class PlayerController : MonoBehaviour
     // Continuously check if the player is on a log
     private void OnTriggerStay(Collider other)
     {
-        // If the player is on the log, and we haven't already set the flag
+        // Check if the player is on a log
         if (other.CompareTag("Log"))
         {
-            if (!isOnLog)  // Only set it to true if it's not already set
+            if (!isOnLog) 
             {
                 isOnLog = true;  // Player is on the log, safe from water death
                 Debug.Log("Player is on a Log");
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
             // Add a margin of safety before the player is considered to have left the log
             if (!isLeavingLog)
             {
-                StartCoroutine(WaitAndCheckExit(other));  // Use a delay to check exit more reliably
+                StartCoroutine(WaitAndCheckExit(other));
             }
         }
     }
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);  // Small delay before setting exit state
 
-        if (!isLeavingLog)  // Make sure the player is still outside the log after the delay
+        if (!isLeavingLog)
         {
             isOnLog = false;  // Player has completely left the log
             Debug.Log("Player left the Log");
@@ -106,6 +107,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+
 
     // Player reached a cove (complete level or goal)
     public void ReachedCove()

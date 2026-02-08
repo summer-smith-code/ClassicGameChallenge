@@ -1,24 +1,24 @@
 using UnityEngine;
 
 // Resets the car's position when it enters the trigger
-public class ResetPoint : MonoBehaviour
+public class Lvl2Reset : MonoBehaviour
 
 {
     public Transform resetPoint;
-    public float xOffset = 3f;
+    public float zOffset = 3f;
 
     //Reset position of the car/log when it enters the trigger
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Car") && !other.CompareTag("Log")) return;
 
-        Debug.Log("Car triggered reset point: " + other.name);
+        //Debug.Log("Car triggered reset point: " + other.name);
 
-        // Only modify X position
+        // Only modify Z position
         Vector3 newPos = other.transform.position;
 
         // Add offset
-        newPos.x = resetPoint.position.x + xOffset;
+        newPos.z = resetPoint.position.z + zOffset;
 
         Rigidbody rb = other.attachedRigidbody;
 
