@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 //Ducker Movement
 
 public class DuckerMovement : MonoBehaviour
@@ -17,8 +18,16 @@ public class DuckerMovement : MonoBehaviour
     //works with logs that wrap (MoveCycle script)
     private float wrapThreshold = 5f;
 
+
     void Start()
     {
+        // Ducker bobbing animation
+        // Sequence seq = DOTween.Sequence();
+        // seq.Append(transform.DOMoveY(transform.position.y + 1f, 3f));
+
+        DOTween.SetTweensCapacity(100, 10);
+        transform.DOScaleY(0.009f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
         // Snap ducker to nearest grid
         targetPosition = new Vector3(Mathf.Round(transform.position.x),
             yOffset,
@@ -42,8 +51,7 @@ public class DuckerMovement : MonoBehaviour
         {
             Vector3 input = Vector3.zero;
             
-            //Takes player input
-
+            // Takes player input
             if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
                 input = Vector3.forward;
             else if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -53,19 +61,25 @@ public class DuckerMovement : MonoBehaviour
             else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
                 input = Vector3.right;
 
-            //Uses player input to move Ducker
+            // Uses player input to move Ducker
             if (input != Vector3.zero)
             {
                 moveDirection = input.normalized;
                 targetPosition += input;
                 targetPosition.y = yOffset;
+
+                // Clamp target position within boundaries
+                targetPosition.x = Mathf.Clamp(targetPosition.x, -7f, 7f);
+                targetPosition.z = Mathf.Clamp(targetPosition.z, 0f, 16f);
             }
         }
     }
+
     //ducker moving animation
     void MoveTowardsTarget()
     {
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        
     }
 
     //Ducker rotating animation
