@@ -8017,6 +8017,14 @@ PrefabInstance:
       propertyPath: yOffset
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4435780045470672273, guid: b2723e50692ab3f489ce8de5effec999, type: 3}
+      propertyPath: duckMove.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435780045470672273, guid: b2723e50692ab3f489ce8de5effec999, type: 3}
+      propertyPath: duckMove.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 5bc0fb31e48cd3348ac03545698ffc39, type: 3}
     - target: {fileID: 6096252002293525706, guid: b2723e50692ab3f489ce8de5effec999, type: 3}
       propertyPath: m_Size.x
       value: 42
@@ -8045,6 +8053,14 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 1421437243}
+    - target: {fileID: 6832262631347409972, guid: b2723e50692ab3f489ce8de5effec999, type: 3}
+      propertyPath: example.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6832262631347409972, guid: b2723e50692ab3f489ce8de5effec999, type: 3}
+      propertyPath: example.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: da4245e2568dc5e4887536a97010528f, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22768,6 +22784,51 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 12a0e0c241db00942a55031bfe946736, type: 3}
   m_PrefabInstance: {fileID: 1734904288}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1072792846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1072792848}
+  - component: {fileID: 1072792847}
+  m_Layer: 0
+  m_Name: SoundFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1072792847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072792846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd56d0bc1327b594d959e81f3adc9de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXObject: {fileID: 5500440897481757209, guid: 0254c716bf0c9b747b81f8f37ccb9f68, type: 3}
+--- !u!4 &1072792848
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072792846}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.667019, y: -4.414079, z: 3.698072}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1074850271
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49097,3 +49158,4 @@ SceneRoots:
   - {fileID: 39112238}
   - {fileID: 368327687}
   - {fileID: 708929800}
+  - {fileID: 1072792848}
