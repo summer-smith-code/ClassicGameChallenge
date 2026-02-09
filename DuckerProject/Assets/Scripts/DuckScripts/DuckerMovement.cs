@@ -4,6 +4,7 @@ using DG.Tweening;
 
 public class DuckerMovement : MonoBehaviour
 {
+    public AudioClip[] duckMove;
     //Ducker movespeed/startinglocation
     public float moveSpeed = 8f;
     public float yOffset = 0.34f;
@@ -21,12 +22,12 @@ public class DuckerMovement : MonoBehaviour
 
     void Start()
     {
-        // Ducker bobbing animation
-        // Sequence seq = DOTween.Sequence();
-        // seq.Append(transform.DOMoveY(transform.position.y + 1f, 3f));
 
+        //Ducker bobbing animation
         DOTween.SetTweensCapacity(100, 10);
         transform.DOScaleY(0.009f, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+
+
 
         // Snap ducker to nearest grid
         targetPosition = new Vector3(Mathf.Round(transform.position.x),
@@ -64,6 +65,7 @@ public class DuckerMovement : MonoBehaviour
             // Uses player input to move Ducker
             if (input != Vector3.zero)
             {
+                SoundFXManager.Instance.PlaySound(duckMove, transform, 0.5f, 0);
                 moveDirection = input.normalized;
                 targetPosition += input;
                 targetPosition.y = yOffset;

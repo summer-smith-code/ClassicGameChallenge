@@ -5,6 +5,7 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public Transform startPoint;
+    public AudioClip[] example;
 
     //Tracks log collisions
     private bool isOnLog = false;
@@ -66,6 +67,7 @@ public class PlayerController : MonoBehaviour
     // Teleports player to starting position and resets velocity
     private void TeleportToStart()
     {
+        SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
         DuckerMovement duckerMovement = GetComponent<DuckerMovement>();
         Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -98,6 +100,7 @@ public class PlayerController : MonoBehaviour
     // Handles player reaching a cove, notifying GameManager and teleporting to start
     public void ReachedCove()
     {
+        SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
         GameManager.Instance.CoveFilled();
         TeleportToStart();
     }

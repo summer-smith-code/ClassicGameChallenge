@@ -11123,6 +11123,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 48f97771a7ac528489cd8f1dd3652d06, type: 3}
   m_PrefabInstance: {fileID: 580362256}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &581849855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 581849857}
+  - component: {fileID: 581849856}
+  m_Layer: 0
+  m_Name: SoundFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &581849856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581849855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd56d0bc1327b594d959e81f3adc9de3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundFXObject: {fileID: 5500440897481757209, guid: 0254c716bf0c9b747b81f8f37ccb9f68, type: 3}
+--- !u!4 &581849857
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581849855}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.8081086, y: -6.1745706, z: 6.732115}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &584195458
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24755,6 +24800,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e693a274c314f67418d8fdee640dba20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  duckMove:
+  - {fileID: 8300000, guid: 6dc7302452415df438e9cea239df164b, type: 3}
   moveSpeed: 8
   yOffset: 0.34
   rotationSpeed: 720
@@ -24775,6 +24822,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPoint: {fileID: 1438316502}
+  example:
+  - {fileID: 8300000, guid: da4245e2568dc5e4887536a97010528f, type: 3}
+  - {fileID: 8300000, guid: 6dc7302452415df438e9cea239df164b, type: 3}
 --- !u!54 &1438474435
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -37247,6 +37297,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 581849857}
   - {fileID: 325478541}
   - {fileID: 1842906505}
   - {fileID: 1497714768}
