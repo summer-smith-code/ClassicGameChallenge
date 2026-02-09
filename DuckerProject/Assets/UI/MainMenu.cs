@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         Debug.Log("Pressed Play");
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(3);
     }
 
     public void Play2()
