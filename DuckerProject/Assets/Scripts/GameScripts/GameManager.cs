@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public int totalLives = 3;
     public int totalCoves = 10;
 
+    public int points = 0;
+
     // Current values that track player's lives and filled coves
     [HideInInspector] public int currentLives;
     [HideInInspector] public int covesFilled;
@@ -40,8 +42,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Reset variables
-        currentLives = totalLives;
+        currentLives = 3;
         covesFilled = 0;
+        points = 0;
 
         Debug.Log("Game started with " + totalLives + " lives and " + totalCoves + " coves.");
 
@@ -82,10 +85,14 @@ public class GameManager : MonoBehaviour
     {
         covesFilled++;
 
+        points += 100;
+
         Debug.Log("Cove filled! Total coves filled: " + covesFilled);
 
         if (covesFilled >= totalCoves)
         {
+            points += 1000; 
+
             WinGame();
         }
     }
