@@ -1,5 +1,5 @@
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,8 +17,10 @@ public class GameManager : MonoBehaviour
     // Prevent multiple life loss calls during a single death event
     private bool isPlayerDead = false;
 
-    // Reference to the TMP
-    public TextMeshProUGUI livesText;
+    [Header("Lives UI")]
+    public Image[] lifeImages;
+    public Sprite fullLifeSprite;
+    public Sprite emptyLifeSprite;
 
     private void Awake()
     {
@@ -40,94 +42,86 @@ public class GameManager : MonoBehaviour
         currentLives = totalLives;
         covesFilled = 0;
 
-        // Log the initial game state
         Debug.Log("Game started with " + totalLives + " lives and " + totalCoves + " coves.");
 
         // Update the UI
-        UpdateLivesText();
+        UpdateLivesUI();
     }
 
     // Method called when the player loses a life
     public void PlayerLostLife()
     {
-        // Prevent double life loss
         if (isPlayerDead) return;
 
-        // Mark the player as dead
         isPlayerDead = true;
 
-        // Decrease the player's remaining lives
         currentLives--;
+        currentLives = Mathf.Max(currentLives, 0);
 
-        // Log the remaining lives
         Debug.Log("Player lost a life. Lives remaining: " + currentLives);
 
-        // Update the UI
-        UpdateLivesText();
+        UpdateLivesUI();
 
-        // Check if the player has run out of lives
         if (currentLives <= 0)
         {
-            // Game Over message
-            Debug.Log("Game Over!");
             GameOver();
         }
         else
         {
-            // Reset the death flag after a short delay
-            Invoke("ResetDeathFlag", 1f);
+            Invoke(nameof(ResetDeathFlag), 1f);
         }
     }
 
-    // Reset the isPlayerDead flag
     private void ResetDeathFlag()
     {
- 
         isPlayerDead = false;
     }
 
-
     public void CoveFilled()
     {
-        // Fill 1 cove
         covesFilled++;
 
-        // Log the number of filled coves
         Debug.Log("Cove filled! Total coves filled: " + covesFilled);
 
-        // Check if the player has filled all the coves
         if (covesFilled >= totalCoves)
         {
-            // Victory message
-            Debug.Log("You Win!");
             WinGame();
         }
     }
 
-    // Update the TMP
-    private void UpdateLivesText()
+    //Life UI
+    private void UpdateLivesUI()
     {
-        if (livesText != null)
+        if (lifeImages == null || lifeImages.Length == 0)
         {
-            livesText.text = "Lives: " + currentLives;
+            Debug.LogWarning("Life Images not assigned!");
+            return;
         }
-        else
+
+        for (int i = 0; i < lifeImages.Length; i++)
         {
-            Debug.LogWarning("LivesText UI element is not assigned!");
+            if (lifeImages[i] == null) continue;
+
+            if (i < currentLives)
+            {
+                lifeImages[i].sprite = fullLifeSprite;
+            }
+            else
+            {
+                lifeImages[i].sprite = emptyLifeSprite;
+            }
         }
     }
 
     private void GameOver()
     {
-        // Handle game over logic
         Debug.Log("Game Over!");
-        //Link to lose screen
+        // Link to lose screen here
     }
 
     private void WinGame()
     {
-        // Handle win logic
         Debug.Log("You won!");
-        //Link to win screen
+        // Link to win screen here
     }
 }
