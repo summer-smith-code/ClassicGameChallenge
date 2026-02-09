@@ -13222,9 +13222,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 611098674032482769, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2034610375776446118, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2727681152711436534, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2758367939047531346, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
       propertyPath: m_Name
       value: Jeep
+      objectReference: {fileID: 0}
+    - target: {fileID: 2774859029232933936, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3246076815079471592, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13232,7 +13248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3246076815079471592, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.159
       objectReference: {fileID: 0}
     - target: {fileID: 3246076815079471592, guid: c301aa39aadda894c90bcf93ee7f2072, type: 3}
       propertyPath: m_LocalPosition.z
