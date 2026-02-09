@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 15efd43e9d521cd42ab10185bf3b522f
+guid: 28b79a72e570e0f4095f371239c3f396
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,38 +7,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Jeep_Base_Body
-    second: {fileID: 2100000, guid: 4bd50bb401f98d84eac01fa20aea2abf, type: 2}
+      name: base
+    second: {fileID: 2100000, guid: 076cad354c00bcd40970ea6b63b3e0d9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Jeep_Bumpers
-    second: {fileID: 2100000, guid: 77c1e484fb9d8e54a99345b333a52fa3, type: 2}
+      name: lights
+    second: {fileID: 2100000, guid: 69c394ad7284aa043877325a1288a357, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Jeep_Glass
-    second: {fileID: 2100000, guid: ed51e29e2c521af4b84e8d2f03328466, type: 2}
+      name: metal
+    second: {fileID: 2100000, guid: 6cdc2d167b4e78c4c8751301eb2b00b9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Jeep_Wheels
-    second: {fileID: 2100000, guid: d28c363ed4a7e064980d079d57d8e5ff, type: 2}
+      name: tires
+    second: {fileID: 2100000, guid: 3eaedb97bd12be84e8ea2ba0a4b211cb, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Lights1
-    second: {fileID: 2100000, guid: 5ab7c5e2245010a42b378f15dcdcd8d2, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert1
-    second: {fileID: 2100000, guid: 27e1b689a14220a45bb8ed96a64f7092, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: openPBRSurface13
-    second: {fileID: 2100000, guid: a60961173d8830c45b8dfed3f9476e95, type: 2}
+      name: windows
+    second: {fileID: 2100000, guid: 591ab00cc617bf145bc7f8321eadec65, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
