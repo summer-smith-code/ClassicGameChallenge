@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -116,12 +117,12 @@ public class GameManager : MonoBehaviour
     private void GameOver()
     {
         Debug.Log("Game Over!");
-        // Link to lose screen here
+        SceneManager.LoadScene("LoseScreen");
     }
 
     private void WinGame()
     {
         Debug.Log("You won!");
-        // Link to win screen here
+        SceneManager.LoadScene("WinScreen");
     }
 }
