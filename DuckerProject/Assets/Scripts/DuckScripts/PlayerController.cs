@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         // If player was on a log last frame but isn't this frame, check for water collision
         isOnLog = touchingLogThisFrame;
