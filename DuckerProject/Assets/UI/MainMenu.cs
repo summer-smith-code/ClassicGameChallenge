@@ -15,7 +15,7 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         Debug.Log("Pressed Play");
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(1);
     }
 
     public void Play2()
