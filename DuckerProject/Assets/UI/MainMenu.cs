@@ -6,6 +6,12 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class MainMenu : MonoBehaviour
 {
+    public void Menu()
+    {
+        Debug.Log("Pressed Menu");
+        SceneManager.LoadScene(0);
+    }
+
     public void Play()
     {
         Debug.Log("Pressed Play");
