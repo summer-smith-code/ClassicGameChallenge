@@ -58,13 +58,17 @@ public class GameManager : MonoBehaviour
             ResetGame();
     }
 
-    //resets game state when replaying from menu
+    //resets game state when replaying from menu or loading a new scene
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        ConnectLifeUI();
-        ConnectScoreUI();
-        UpdateLivesUI();
-        UpdateScoreUI();
+        // Only update UI if this is a level scene, not Win/Lose screen
+        if (scene.name != "WinScreen" && scene.name != "LoseScreen")
+        {
+            ConnectLifeUI();
+            ConnectScoreUI();
+            UpdateLivesUI();
+            UpdateScoreUI();
+        }
     }
 
     public void ResetGame()
@@ -78,6 +82,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
         Debug.Log("Game reset: Lives=" + currentLives + ", Points=" + points + ", Coves=" + covesFilled);
     }
+
     //connects UI when playing from menu
     private void ConnectLifeUI()
     {
@@ -107,6 +112,7 @@ public class GameManager : MonoBehaviour
                 Debug.LogWarning("No TMP_Text named 'ScoreText' found! Add a TextMeshPro UI element and name it 'ScoreText'.");
         }
     }
+
     //called when player loses a life
     public void PlayerLostLife()
     {
@@ -125,7 +131,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void ResetDeathFlag() => isPlayerDead = false;
-    
+
     //called when player reaches a cove
     public void CoveFilled()
     {
@@ -169,11 +175,46 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GameOver() => SceneManager.LoadScene("LoseScreen");
+    // ---- UPDATED WIN/LOSE HANDLING ---- //
+
+    private void GameOver()
+    {
+        SceneManager.sceneLoaded += OnEndScreenLoaded;
+        SceneManager.LoadScene("LoseScreen");
+    }
 
     private void WinGame()
     {
-        UpdateScoreUI();
+        SceneManager.sceneLoaded += OnEndScreenLoaded;
         SceneManager.LoadScene("WinScreen");
+    }
+
+    // Runs after Win/Lose scene is loaded
+    private void OnEndScreenLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "WinScreen" && scene.name != "LoseScreen") return;
+
+        TMP_Text endScoreText = null;
+        TMP_Text[] allTMPTexts = FindObjectsOfType<TMP_Text>();
+        foreach (TMP_Text tmp in allTMPTexts)
+        {
+            if (tmp.name == "ScoreText")
+            {
+                endScoreText = tmp;
+                break;
+            }
+        }
+
+        if (endScoreText != null)
+        {
+            endScoreText.text = "Score: " + points;
+        }
+        else
+        {
+            Debug.LogWarning("No TMP_Text named 'ScoreText' found on " + scene.name + "!");
+        }
+
+        // Unsubscribe after updating once
+        SceneManager.sceneLoaded -= OnEndScreenLoaded;
     }
 }
