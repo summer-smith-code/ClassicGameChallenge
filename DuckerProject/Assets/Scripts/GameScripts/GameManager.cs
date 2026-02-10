@@ -217,4 +217,21 @@ public class GameManager : MonoBehaviour
         // Unsubscribe after updating once
         SceneManager.sceneLoaded -= OnEndScreenLoaded;
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            QuitGame();
+        }
+    }
+
+    private void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }
