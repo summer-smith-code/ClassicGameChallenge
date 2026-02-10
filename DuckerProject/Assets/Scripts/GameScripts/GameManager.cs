@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TMPro; // Needed for TextMeshPro
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -23,8 +23,12 @@ public class GameManager : MonoBehaviour
     private Image[] lifeImages;
 
     [Header("Score UI")]
-    public TMP_Text scoreText; // Auto-detected if not assigned
+    public TMP_Text scoreText;
 
+    [Header("Scoring Settings")]
+    public int pointsPerHop = 10;
+
+    //Ensures only 1 game manager
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,18 +51,20 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    //reset game state
     private void Start()
     {
         if (currentLives == 0)
             ResetGame();
     }
 
+    //resets game state when replaying from menu
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ConnectLifeUI();
-        ConnectScoreUI();   // Auto-detect TMP text by name
+        ConnectScoreUI();
         UpdateLivesUI();
-        UpdateScoreUI();    // Refresh the score display
+        UpdateScoreUI();
     }
 
     public void ResetGame()
@@ -72,7 +78,7 @@ public class GameManager : MonoBehaviour
         UpdateScoreUI();
         Debug.Log("Game reset: Lives=" + currentLives + ", Points=" + points + ", Coves=" + covesFilled);
     }
-
+    //connects UI when playing from menu
     private void ConnectLifeUI()
     {
         Image[] allImages = FindObjectsOfType<Image>();
@@ -87,10 +93,7 @@ public class GameManager : MonoBehaviour
     {
         if (scoreText == null)
         {
-            // Find all TMP_Text objects in the scene
             TMP_Text[] allTMPTexts = FindObjectsOfType<TMP_Text>();
-
-            // Pick the one named "ScoreText"
             foreach (TMP_Text tmp in allTMPTexts)
             {
                 if (tmp.name == "ScoreText")
@@ -104,7 +107,7 @@ public class GameManager : MonoBehaviour
                 Debug.LogWarning("No TMP_Text named 'ScoreText' found! Add a TextMeshPro UI element and name it 'ScoreText'.");
         }
     }
-
+    //called when player loses a life
     public void PlayerLostLife()
     {
         if (isPlayerDead) return;
@@ -122,21 +125,29 @@ public class GameManager : MonoBehaviour
     }
 
     private void ResetDeathFlag() => isPlayerDead = false;
-
+    
+    //called when player reaches a cove
     public void CoveFilled()
     {
         covesFilled++;
-        points += 50; // 50 points per cove
-        UpdateScoreUI(); // Update score after collecting a cove
-
+        points += 50;
+        UpdateScoreUI();
         Debug.Log("Cove filled! Total coves: " + covesFilled);
 
         if (covesFilled >= totalCoves)
         {
-            points += 1000; // Bonus for filling all coves
-            UpdateScoreUI(); // Update score for bonus
+            points += currentLives * 200;
+            UpdateScoreUI();
             WinGame();
         }
+    }
+
+    //tracks hop score
+    public void PlayerHopped()
+    {
+        points += pointsPerHop;
+        UpdateScoreUI();
+        Debug.Log("Player hopped! Points: " + points);
     }
 
     private void UpdateLivesUI()
@@ -162,8 +173,7 @@ public class GameManager : MonoBehaviour
 
     private void WinGame()
     {
-        points += currentLives * 200; // Bonus for unused lives
-        UpdateScoreUI(); // Update score before going to win screen
+        UpdateScoreUI();
         SceneManager.LoadScene("WinScreen");
     }
 }

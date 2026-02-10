@@ -1,54 +1,70 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
-//PlayerCollision Controller
+// PlayerCollision Controller
 public class PlayerController : MonoBehaviour
 {
     public Transform startPoint;
     public AudioClip[] example;
 
-    //Tracks log collisions
+    // Tracks log collisions
     private bool isOnLog = false;
     private bool touchingLogThisFrame = false;
 
-    // Detects collisions with cars, coves, logs, and water
+    // Tracks which rows the player has already scored for this life
+    private HashSet<int> visitedRows = new HashSet<int>();
+
+    private void Start()
+    {
+        visitedRows.Clear();
+
+        // Add starting row so player doesn't get points immediately
+        int startingRow = Mathf.RoundToInt(transform.position.z);
+        visitedRows.Add(startingRow);
+    }
+
+    //tracks collisions
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Car"))
         {
             GameManager.Instance.PlayerLostLife();
             TeleportToStart();
+            visitedRows.Clear();
+
+            // Mark starting row to prevent immediate points
+            int startingRow = Mathf.RoundToInt(transform.position.z);
+            visitedRows.Add(startingRow);
         }
         else if (other.CompareTag("Cove"))
         {
             ReachedCove();
+            visitedRows.Clear();
+
+            // Mark starting row for next run
+            int startingRow = Mathf.RoundToInt(transform.position.z);
+            visitedRows.Add(startingRow);
         }
     }
-    // Detects if player is on a log
+    //dont die in water if on log
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Log"))
-        {
             touchingLogThisFrame = true;
-        }
     }
 
-    // Detects when player leaves a log
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Log"))
-        {
             isOnLog = false;
-        }
     }
 
     private void FixedUpdate()
     {
-        // If player was on a log last frame but isn't this frame, check for water collision
         isOnLog = touchingLogThisFrame;
         touchingLogThisFrame = false;
 
-       
+        // Check for water death
         if (!isOnLog)
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, 0.1f);
@@ -58,13 +74,27 @@ public class PlayerController : MonoBehaviour
                 {
                     GameManager.Instance.PlayerLostLife();
                     TeleportToStart();
+                    visitedRows.Clear();
+
+                    // Add starting row again to avoid immediate points
+                    int startingRow = Mathf.RoundToInt(transform.position.z);
+                    visitedRows.Add(startingRow);
                     break;
                 }
             }
         }
+
+        // Handle scoring for new rows
+        int currentRow = Mathf.RoundToInt(transform.position.z);
+        if (!visitedRows.Contains(currentRow))
+        {
+ 
+            visitedRows.Add(currentRow);
+            GameManager.Instance.PlayerHopped();
+        }
     }
 
-    // Teleports player to starting position and resets velocity
+    //teleport player to start
     private void TeleportToStart()
     {
         SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
@@ -97,11 +127,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Handles player reaching a cove, notifying GameManager and teleporting to start
+    //called when player reaches cove
     public void ReachedCove()
     {
         SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
         GameManager.Instance.CoveFilled();
         TeleportToStart();
+
+
+        visitedRows.Clear();
+        int startingRow = Mathf.RoundToInt(transform.position.z);
+        visitedRows.Add(startingRow);
     }
 }
