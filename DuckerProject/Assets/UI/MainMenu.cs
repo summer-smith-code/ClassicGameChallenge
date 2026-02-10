@@ -6,6 +6,9 @@ using static Cinemachine.DocumentationSortingAttribute;
 
 public class MainMenu : MonoBehaviour
 {
+    [SerializeField]
+    GameObject creditsMenu;
+
     public void Menu()
     {
         Debug.Log("Pressed Menu");
@@ -22,6 +25,12 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Pressed Play2");
         SceneManager.LoadScene(2);
+    }
+
+    public void Credits()
+    {
+        Debug.Log("Pressed Credits");
+        creditsMenu.SetActive(!creditsMenu.activeSelf);
     }
 
     public void Quit()
