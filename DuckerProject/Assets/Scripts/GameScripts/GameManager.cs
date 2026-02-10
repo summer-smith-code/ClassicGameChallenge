@@ -4,132 +4,123 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Ensure only one GameManager exists
     public static GameManager Instance;
 
-    // Total number of lives and coves
+    [Header("Game Settings")]
     public int totalLives = 3;
     public int totalCoves = 10;
 
-    public int points = 0;
-
-    // Current values that track player's lives and filled coves
     [HideInInspector] public int currentLives;
     [HideInInspector] public int covesFilled;
+    public int points = 0;
 
-    // Prevent multiple life loss calls during a single death event
     private bool isPlayerDead = false;
 
-    [Header("Lives UI")]
-    public Image[] lifeImages;
+    [Header("Heart UI")]
     public Sprite fullLifeSprite;
     public Sprite emptyLifeSprite;
+    private Image[] lifeImages;
 
     private void Awake()
     {
-        // Ensure there's only one instance of GameManager
+        
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void Start()
     {
-        // Reset variables
-        currentLives = 3;
-        covesFilled = 0;
-        points = 0;
 
-        Debug.Log("Game started with " + totalLives + " lives and " + totalCoves + " coves.");
+        if (currentLives == 0)
+            ResetGame();
+    }
 
-        // Update the UI
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        ConnectLifeUI();
         UpdateLivesUI();
     }
 
-    // Method called when the player loses a life
+
+    public void ResetGame()
+    {
+        currentLives = totalLives;
+        covesFilled = 0;
+        points = 0;
+        isPlayerDead = false;
+
+        UpdateLivesUI();
+        Debug.Log("Game reset: Lives=" + currentLives + ", Points=" + points + ", Coves=" + covesFilled);
+    }
+
+    private void ConnectLifeUI()
+    {
+        Image[] allImages = FindObjectsOfType<Image>();
+        lifeImages = System.Array.FindAll(allImages, img => img.name.ToLower().StartsWith("life"));
+        System.Array.Sort(lifeImages, (a, b) => a.name.CompareTo(b.name));
+
+        if (lifeImages.Length == 0)
+            Debug.LogWarning("No life images found! Make sure your hearts are named life1, life2, life3.");
+    }
+
     public void PlayerLostLife()
     {
         if (isPlayerDead) return;
 
         isPlayerDead = true;
-
-        currentLives--;
-        currentLives = Mathf.Max(currentLives, 0);
-
+        currentLives = Mathf.Max(currentLives - 1, 0);
         Debug.Log("Player lost a life. Lives remaining: " + currentLives);
 
         UpdateLivesUI();
 
         if (currentLives <= 0)
-        {
             GameOver();
-        }
         else
-        {
-            Invoke(nameof(ResetDeathFlag), 1f);
-        }
+            Invoke(nameof(ResetDeathFlag), 0.1f);
     }
 
-    private void ResetDeathFlag()
-    {
-        isPlayerDead = false;
-    }
+    private void ResetDeathFlag() => isPlayerDead = false;
 
     public void CoveFilled()
     {
         covesFilled++;
-
         points += 100;
-
-        Debug.Log("Cove filled! Total coves filled: " + covesFilled);
+        Debug.Log("Cove filled! Total coves: " + covesFilled);
 
         if (covesFilled >= totalCoves)
         {
-            points += 1000; 
-
+            points += 1000;
             WinGame();
         }
     }
 
-    //Life UI
     private void UpdateLivesUI()
     {
-        if (lifeImages == null || lifeImages.Length == 0)
-        {
-            Debug.LogWarning("Life Images not assigned!");
-            return;
-        }
+        if (lifeImages == null || lifeImages.Length == 0) return;
 
         for (int i = 0; i < lifeImages.Length; i++)
         {
             if (lifeImages[i] == null) continue;
-
-            if (i < currentLives)
-            {
-                lifeImages[i].sprite = fullLifeSprite;
-            }
-            else
-            {
-                lifeImages[i].sprite = emptyLifeSprite;
-            }
+            lifeImages[i].sprite = (i < currentLives) ? fullLifeSprite : emptyLifeSprite;
         }
     }
 
-    private void GameOver()
-    {
-        Debug.Log("Game Over!");
-        SceneManager.LoadScene("LoseScreen");
-    }
-
-    private void WinGame()
-    {
-        Debug.Log("You won!");
-        SceneManager.LoadScene("WinScreen");
-    }
+    private void GameOver() => SceneManager.LoadScene("LoseScreen");
+    private void WinGame() => SceneManager.LoadScene("WinScreen");
 }
