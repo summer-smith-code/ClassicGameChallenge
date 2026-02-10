@@ -6397,6 +6397,7 @@ MonoBehaviour:
   fullLifeSprite: {fileID: 21300000, guid: 952bf44f22a800d4fb58f90c92c8613c, type: 3}
   emptyLifeSprite: {fileID: 21300000, guid: 4f06ee8dcdb44ee42a5699791f578212, type: 3}
   scoreText: {fileID: 0}
+  pointsPerHop: 10
 --- !u!1001 &326577439
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24568,7 +24569,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   duckMove:
-  - {fileID: 8300000, guid: 6dc7302452415df438e9cea239df164b, type: 3}
+  - {fileID: 8300000, guid: 5bc0fb31e48cd3348ac03545698ffc39, type: 3}
   moveSpeed: 8
   yOffset: 0.34
   rotationSpeed: 720
@@ -24591,7 +24592,7 @@ MonoBehaviour:
   startPoint: {fileID: 1438316502}
   example:
   - {fileID: 8300000, guid: da4245e2568dc5e4887536a97010528f, type: 3}
-  - {fileID: 8300000, guid: 6dc7302452415df438e9cea239df164b, type: 3}
+  - {fileID: 8300000, guid: ea7ca8ea35ccea0499c1b9de14908722, type: 3}
 --- !u!54 &1438474435
 Rigidbody:
   m_ObjectHideFlags: 0

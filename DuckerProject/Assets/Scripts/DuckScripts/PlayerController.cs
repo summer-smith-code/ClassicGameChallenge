@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Car"))
         {
+            SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
             GameManager.Instance.PlayerLostLife();
             TeleportToStart();
             visitedRows.Clear();
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
                 if (hits[i].CompareTag("Water"))
                 {
                     GameManager.Instance.PlayerLostLife();
+                    SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
                     TeleportToStart();
                     visitedRows.Clear();
 
@@ -97,7 +99,6 @@ public class PlayerController : MonoBehaviour
     //teleport player to start
     private void TeleportToStart()
     {
-        SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
         DuckerMovement duckerMovement = GetComponent<DuckerMovement>();
         Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -130,7 +131,7 @@ public class PlayerController : MonoBehaviour
     //called when player reaches cove
     public void ReachedCove()
     {
-        SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 0);
+        SoundFXManager.Instance.PlaySound(example, transform, 0.5f, 1);
         GameManager.Instance.CoveFilled();
         TeleportToStart();
 
