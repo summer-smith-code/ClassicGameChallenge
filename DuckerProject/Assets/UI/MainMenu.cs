@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static Cinemachine.DocumentationSortingAttribute;
 
 public class MainMenu : MonoBehaviour
 {
@@ -18,12 +15,16 @@ public class MainMenu : MonoBehaviour
     public void Play()
     {
         Debug.Log("Pressed Play");
+        if (GameManager.Instance != null)
+            GameManager.Instance.ResetGame();
         SceneManager.LoadScene(1);
     }
 
     public void Play2()
     {
         Debug.Log("Pressed Play2");
+        if (GameManager.Instance != null)
+            GameManager.Instance.ResetGame();
         SceneManager.LoadScene(2);
     }
 
@@ -42,8 +43,6 @@ public class MainMenu : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
             Quit();
-        }
     }
 }

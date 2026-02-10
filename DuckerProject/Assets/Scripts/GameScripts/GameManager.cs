@@ -1,133 +1,220 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    // Ensure only one GameManager exists
     public static GameManager Instance;
 
-    // Total number of lives and coves
+    [Header("Game Settings")]
     public int totalLives = 3;
     public int totalCoves = 10;
 
-    // Current values that track player's lives and filled coves
     [HideInInspector] public int currentLives;
     [HideInInspector] public int covesFilled;
+    public int points = 0;
 
-    // Prevent multiple life loss calls during a single death event
     private bool isPlayerDead = false;
 
-    // Reference to the TMP
-    public TextMeshProUGUI livesText;
+    [Header("Heart UI")]
+    public Sprite fullLifeSprite;
+    public Sprite emptyLifeSprite;
+    private Image[] lifeImages;
 
+    [Header("Score UI")]
+    public TMP_Text scoreText;
+
+    [Header("Scoring Settings")]
+    public int pointsPerHop = 10;
+
+    //Ensures only 1 game manager
     private void Awake()
     {
-        // Ensure there's only one instance of GameManager
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    //reset game state
     private void Start()
     {
-        // Reset variables
+        if (currentLives == 0)
+            ResetGame();
+    }
+
+    //resets game state when replaying from menu or loading a new scene
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Only update UI if this is a level scene, not Win/Lose screen
+        if (scene.name != "WinScreen" && scene.name != "LoseScreen")
+        {
+            ConnectLifeUI();
+            ConnectScoreUI();
+            UpdateLivesUI();
+            UpdateScoreUI();
+        }
+    }
+
+    public void ResetGame()
+    {
         currentLives = totalLives;
         covesFilled = 0;
+        points = 0;
+        isPlayerDead = false;
 
-        // Log the initial game state
-        Debug.Log("Game started with " + totalLives + " lives and " + totalCoves + " coves.");
-
-        // Update the UI
-        UpdateLivesText();
+        UpdateLivesUI();
+        UpdateScoreUI();
+        Debug.Log("Game reset: Lives=" + currentLives + ", Points=" + points + ", Coves=" + covesFilled);
     }
 
-    // Method called when the player loses a life
+    //connects UI when playing from menu
+    private void ConnectLifeUI()
+    {
+        Image[] allImages = FindObjectsOfType<Image>();
+        lifeImages = System.Array.FindAll(allImages, img => img.name.ToLower().StartsWith("life"));
+        System.Array.Sort(lifeImages, (a, b) => a.name.CompareTo(b.name));
+
+        if (lifeImages.Length == 0)
+            Debug.LogWarning("No life images found! Make sure your hearts are named life1, life2, life3.");
+    }
+
+    private void ConnectScoreUI()
+    {
+        if (scoreText == null)
+        {
+            TMP_Text[] allTMPTexts = FindObjectsOfType<TMP_Text>();
+            foreach (TMP_Text tmp in allTMPTexts)
+            {
+                if (tmp.name == "ScoreText")
+                {
+                    scoreText = tmp;
+                    break;
+                }
+            }
+
+            if (scoreText == null)
+                Debug.LogWarning("No TMP_Text named 'ScoreText' found! Add a TextMeshPro UI element and name it 'ScoreText'.");
+        }
+    }
+
+    //called when player loses a life
     public void PlayerLostLife()
     {
-        // Prevent double life loss
         if (isPlayerDead) return;
 
-        // Mark the player as dead
         isPlayerDead = true;
-
-        // Decrease the player's remaining lives
-        currentLives--;
-
-        // Log the remaining lives
+        currentLives = Mathf.Max(currentLives - 1, 0);
         Debug.Log("Player lost a life. Lives remaining: " + currentLives);
 
-        // Update the UI
-        UpdateLivesText();
+        UpdateLivesUI();
 
-        // Check if the player has run out of lives
         if (currentLives <= 0)
-        {
-            // Game Over message
-            Debug.Log("Game Over!");
             GameOver();
-        }
         else
-        {
-            // Reset the death flag after a short delay
-            Invoke("ResetDeathFlag", 1f);
-        }
+            Invoke(nameof(ResetDeathFlag), 0.1f);
     }
 
-    // Reset the isPlayerDead flag
-    private void ResetDeathFlag()
-    {
- 
-        isPlayerDead = false;
-    }
+    private void ResetDeathFlag() => isPlayerDead = false;
 
-
+    //called when player reaches a cove
     public void CoveFilled()
     {
-        // Fill 1 cove
         covesFilled++;
+        points += 50;
+        UpdateScoreUI();
+        Debug.Log("Cove filled! Total coves: " + covesFilled);
 
-        // Log the number of filled coves
-        Debug.Log("Cove filled! Total coves filled: " + covesFilled);
-
-        // Check if the player has filled all the coves
         if (covesFilled >= totalCoves)
         {
-            // Victory message
-            Debug.Log("You Win!");
+            points += currentLives * 200;
+            UpdateScoreUI();
             WinGame();
         }
     }
 
-    // Update the TMP
-    private void UpdateLivesText()
+    //tracks hop score
+    public void PlayerHopped()
     {
-        if (livesText != null)
+        points += pointsPerHop;
+        UpdateScoreUI();
+        Debug.Log("Player hopped! Points: " + points);
+    }
+
+    private void UpdateLivesUI()
+    {
+        if (lifeImages == null || lifeImages.Length == 0) return;
+
+        for (int i = 0; i < lifeImages.Length; i++)
         {
-            livesText.text = "Lives: " + currentLives;
-        }
-        else
-        {
-            Debug.LogWarning("LivesText UI element is not assigned!");
+            if (lifeImages[i] == null) continue;
+            lifeImages[i].sprite = (i < currentLives) ? fullLifeSprite : emptyLifeSprite;
         }
     }
 
+    private void UpdateScoreUI()
+    {
+        if (scoreText != null)
+        {
+            scoreText.text = "Score: " + points;
+        }
+    }
+
+    // ---- UPDATED WIN/LOSE HANDLING ---- //
+
     private void GameOver()
     {
-        // Handle game over logic
-        Debug.Log("Game Over!");
-        //Link to lose screen
+        SceneManager.sceneLoaded += OnEndScreenLoaded;
+        SceneManager.LoadScene("LoseScreen");
     }
 
     private void WinGame()
     {
-        // Handle win logic
-        Debug.Log("You won!");
-        //Link to win screen
+        SceneManager.sceneLoaded += OnEndScreenLoaded;
+        SceneManager.LoadScene("WinScreen");
+    }
+
+    // Runs after Win/Lose scene is loaded
+    private void OnEndScreenLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name != "WinScreen" && scene.name != "LoseScreen") return;
+
+        TMP_Text endScoreText = null;
+        TMP_Text[] allTMPTexts = FindObjectsOfType<TMP_Text>();
+        foreach (TMP_Text tmp in allTMPTexts)
+        {
+            if (tmp.name == "ScoreText")
+            {
+                endScoreText = tmp;
+                break;
+            }
+        }
+
+        if (endScoreText != null)
+        {
+            endScoreText.text = "Score: " + points;
+        }
+        else
+        {
+            Debug.LogWarning("No TMP_Text named 'ScoreText' found on " + scene.name + "!");
+        }
+
+        // Unsubscribe after updating once
+        SceneManager.sceneLoaded -= OnEndScreenLoaded;
     }
 }
